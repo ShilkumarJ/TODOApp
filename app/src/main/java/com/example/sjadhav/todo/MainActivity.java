@@ -15,6 +15,8 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.app.Activity;
 
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -22,8 +24,8 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
 
-    ArrayList<Task>taskArrayList;
-    public RecyclerView listView;
+    static ArrayList<Task>taskArrayList;
+   static public RecyclerView listView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,9 +45,6 @@ public class MainActivity extends AppCompatActivity {
 
         CustomAdapter adapter=new CustomAdapter(taskArrayList);
         listView.setAdapter(adapter);
-     //   RecyclerView.ItemDecoration itemDecoration=new RecyclerView.ItemDecoration() {}
-       // listView.addItemDecoration();
-
     }
     public void add(View v)
     {
@@ -100,10 +99,12 @@ class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.TaskHolder>
     {
         TextView taskName;
         TextView description;
+        ImageView img;
         public TaskHolder(View itemView) {
             super(itemView);
             taskName=(TextView) itemView.findViewById(R.id.task_item_name);
             description=(TextView)itemView.findViewById(R.id.task_descript_id);
+            img=(ImageView)itemView.findViewById(R.id.imageButton);
         }
         public TextView getTaskNameTextView(){
             return taskName;
@@ -117,7 +118,7 @@ class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.TaskHolder>
         super();
         for(int i=0;i<taskArrayList.size();i++) {
             taskList.add(taskArrayList.get(i));
-            System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAASSSSSSSSSSSSSSSSSSSSSSDDDDDDDDDDDDDDDD"+taskArrayList.get(i));
+          //  System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAASSSSSSSSSSSSSSSSSSSSSSDDDDDDDDDDDDDDDD"+taskArrayList.get(i));
         }
 
     }
@@ -133,6 +134,16 @@ class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.TaskHolder>
     public void onBindViewHolder(TaskHolder holder, int position) {
         holder.getTaskNameTextView().setText(taskList.get(position).taskName);
         holder.getTasDescTextView().setText(taskList.get(position).taskDescription);
+        holder.img.setTag("" + position);
+        holder.img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position=Integer.parseInt(((ImageView)v).getTag()+"");
+                MainActivity.taskArrayList.remove(position);
+                CustomAdapter customAdapter=new CustomAdapter(MainActivity.taskArrayList);
+                MainActivity.listView.setAdapter(customAdapter);
+            }
+        });
     }
 
 

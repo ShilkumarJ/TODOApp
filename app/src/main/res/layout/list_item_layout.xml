@@ -3,24 +3,43 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:id="@+id/list_i_layout">
+    android:id="@+id/list_i_layout"
+    android:weightSum="1"
+    android:layout_marginTop="15dp"
+
+   >
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_width="135dp"
+        android:layout_height="60dp"
         android:ellipsize="end"
-        android:maxLines="1"
+        android:maxLines="2"
         android:text="textview1"
-        android:id="@+id/task_item_name" />
+        android:id="@+id/task_item_name"
+        android:layout_weight="0.13"
+        android:textColor="#040505"
+        android:textSize="20dp"
+        />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="0"
+        android:layout_width="185dp"
+        android:layout_height="60dp"
         android:ellipsize="end"
-        android:maxLines="1"
+        android:maxLines="4"
         android:text="textview2"
-        android:id="@+id/task_descript_id"/>
+        android:layout_marginLeft="10dp"
+        android:id="@+id/task_descript_id"
+        android:textSize="15dp"
+        android:layout_weight="0.13"
+        android:textColor="#040505"/>
+
+    <ImageView
+        android:layout_width="25dp"
+        android:layout_height="50dp"
+        android:id="@+id/imageButton"
+        android:layout_weight="0.13"
+        android:src="@drawable/rubbish12"
+        android:layout_gravity="right"/>
+
 
 </LinearLayout>
