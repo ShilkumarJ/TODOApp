@@ -1,6 +1,7 @@
 package com.example.sjadhav.todo;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.app.Activity;
 
 import android.widget.TextView;
 
@@ -19,6 +21,9 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+
+    ArrayList<Task>taskArrayList;
+    public RecyclerView listView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,10 +32,10 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         RecyclerView.LayoutManager layoutManager=new LinearLayoutManager(this);
-        RecyclerView listView=(RecyclerView)findViewById(R.id.recycler_view);
+        listView=(RecyclerView)findViewById(R.id.recycler_view);
         listView.setLayoutManager(layoutManager);
 
-        ArrayList<Task>taskArrayList=new ArrayList<Task>();
+        taskArrayList=new ArrayList<Task>();
         Task t1=new Task("Dinner","With bajirao");
         Task t2=new Task("Movie","Natsamrat");
         taskArrayList.add(t1);
@@ -41,6 +46,11 @@ public class MainActivity extends AppCompatActivity {
      //   RecyclerView.ItemDecoration itemDecoration=new RecyclerView.ItemDecoration() {}
        // listView.addItemDecoration();
 
+    }
+    public void add(View v)
+    {
+        Intent intent=new Intent(this,TaskActivity.class);
+        startActivityForResult(intent,1);
     }
 
     @Override
@@ -63,6 +73,23 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 1) {
+            if(resultCode == Activity.RESULT_OK){
+                String result=data.getStringExtra("result");
+                String description=data.getStringExtra("desc");
+                Task t=new Task(result,description);
+                taskArrayList.add(t);
+                listView.setAdapter(new CustomAdapter(taskArrayList));
+
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
+        }
     }
 }
 class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.TaskHolder>
@@ -113,7 +140,8 @@ class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.TaskHolder>
     public int getItemCount() {
         return taskList.size();
     }
-}
+
+    }
 class Task
 {
       String taskName;
