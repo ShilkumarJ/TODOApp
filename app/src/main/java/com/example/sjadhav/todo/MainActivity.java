@@ -1,6 +1,6 @@
 package com.example.sjadhav.todo;
 
-import android.content.Context;
+
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -8,24 +8,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
 import android.app.Activity;
-
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
 
-    static ArrayList<Task>taskArrayList;
-   static public RecyclerView listView;
+    ArrayList<Task>taskArrayList;
+    public RecyclerView listView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,14 +32,11 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager=new LinearLayoutManager(this);
         listView=(RecyclerView)findViewById(R.id.recycler_view);
         listView.setLayoutManager(layoutManager);
+        Task t=new Task("Movie","Natsamrat with friends");
 
         taskArrayList=new ArrayList<Task>();
-        Task t1=new Task("Dinner","With bajirao");
-        Task t2=new Task("Movie","Natsamrat");
-        taskArrayList.add(t1);
-        taskArrayList.add(t2);
-
-        CustomAdapter adapter=new CustomAdapter(taskArrayList);
+        taskArrayList.add(t);
+        CustomAdapter adapter=new CustomAdapter(this, taskArrayList);
         listView.setAdapter(adapter);
     }
     public void add(View v)
@@ -51,7 +44,17 @@ public class MainActivity extends AppCompatActivity {
         Intent intent=new Intent(this,TaskActivity.class);
         startActivityForResult(intent,1);
     }
-
+    public void displayDetails(View v)
+    {
+        LinearLayout linearLayout=(LinearLayout)v.findViewById(R.id.list_i_layout);
+        ImageView image=(ImageView)linearLayout.getChildAt(2);
+        System.out.println(image.getTag());
+        int position=Integer.parseInt("" + image.getTag());
+        Intent intent=new Intent(this,TaskDetails.class);
+        intent.putExtra("Task Name",taskArrayList.get(position).taskName);
+        intent.putExtra("Description",taskArrayList.get(position).taskDescription);
+        startActivity(intent);
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -82,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
                 String description=data.getStringExtra("desc");
                 Task t=new Task(result,description);
                 taskArrayList.add(t);
-                listView.setAdapter(new CustomAdapter(taskArrayList));
+                listView.setAdapter(new CustomAdapter(this, taskArrayList));
 
             }
             if (resultCode == Activity.RESULT_CANCELED) {
@@ -91,68 +94,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 }
-class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.TaskHolder>
-{
-    ArrayList<Task>taskList=new ArrayList<Task>();
 
-    public static class TaskHolder extends RecyclerView.ViewHolder
-    {
-        TextView taskName;
-        TextView description;
-        ImageView img;
-        public TaskHolder(View itemView) {
-            super(itemView);
-            taskName=(TextView) itemView.findViewById(R.id.task_item_name);
-            description=(TextView)itemView.findViewById(R.id.task_descript_id);
-            img=(ImageView)itemView.findViewById(R.id.imageButton);
-        }
-        public TextView getTaskNameTextView(){
-            return taskName;
-        }
-        public TextView getTasDescTextView(){
-            return description;
-        }
-    }
-
-    public CustomAdapter(ArrayList<Task> taskArrayList) {
-        super();
-        for(int i=0;i<taskArrayList.size();i++) {
-            taskList.add(taskArrayList.get(i));
-          //  System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAASSSSSSSSSSSSSSSSSSSSSSDDDDDDDDDDDDDDDD"+taskArrayList.get(i));
-        }
-
-    }
-
-    @Override
-    public TaskHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v;
-        v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_layout,parent,false);
-        return new TaskHolder(v) ;
-    }
-
-    @Override
-    public void onBindViewHolder(TaskHolder holder, int position) {
-        holder.getTaskNameTextView().setText(taskList.get(position).taskName);
-        holder.getTasDescTextView().setText(taskList.get(position).taskDescription);
-        holder.img.setTag("" + position);
-        holder.img.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int position=Integer.parseInt(((ImageView)v).getTag()+"");
-                MainActivity.taskArrayList.remove(position);
-                CustomAdapter customAdapter=new CustomAdapter(MainActivity.taskArrayList);
-                MainActivity.listView.setAdapter(customAdapter);
-            }
-        });
-    }
-
-
-    @Override
-    public int getItemCount() {
-        return taskList.size();
-    }
-
-    }
 class Task
 {
       String taskName;

@@ -6,9 +6,7 @@
     android:id="@+id/list_i_layout"
     android:weightSum="1"
     android:layout_marginTop="15dp"
-
-   >
-
+    android:onClick="displayDetails">
     <TextView
         android:layout_width="135dp"
         android:layout_height="60dp"
@@ -20,7 +18,6 @@
         android:textColor="#040505"
         android:textSize="20dp"
         />
-
     <TextView
         android:layout_width="185dp"
         android:layout_height="60dp"
@@ -32,7 +29,6 @@
         android:textSize="15dp"
         android:layout_weight="0.13"
         android:textColor="#040505"/>
-
     <ImageView
         android:layout_width="25dp"
         android:layout_height="50dp"

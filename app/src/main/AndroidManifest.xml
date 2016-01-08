@@ -21,6 +21,10 @@
         <activity
             android:name=".TaskActivity"
             android:label="@string/title_activity_task"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".TaskDetails"
+            android:label="@string/title_activity_task_details"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
